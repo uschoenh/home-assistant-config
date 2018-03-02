@@ -1,0 +1,171 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret lat
+  longitude: !secret lon
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elev
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Zurich
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+# introduction:
+
+# Enables the frontend
+frontend:
+  javascript_version: auto
+#  javascript_version: es5
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Set up entities to be recorded
+recorder:
+  purge_interval: 7
+  purge_keep_days: 60
+  exclude:
+    domains:
+      - automation
+      - group
+      - sensor
+      - camera
+      - binary_sensor 
+    entities:
+      - device_tracker.urs_ipad
+  include:
+    entities:
+     - binary_sensor.mqtt_binary_sensor
+     - sensor.mqtt_sensor
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# iOS integration
+ios:
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+media_player:
+  - platform: sonos
+
+# MQTT
+mqtt:
+  broker: core-mosquitto
+  username: !secret mqtt_user
+  password: !secret mqtt_pass
+  discovery: true
+
+switch:
+  - platform: mystrom
+    host: 192.168.1.55
+
+binary_sensor:
+  - platform: random
+  - platform: mqtt
+    state_topic: "anything/bin"
+    payload_on: "true"
+    payload_off: "false"
+    qos: 0
+
+sensor:
+  - platform: moon
+  - platform: wunderground
+    api_key: !secret wu_api
+    lang: DL
+    monitored_conditions:
+      - temp_c
+      - relative_humidity
+      - pressure_mb
+      - pressure_trend
+      - dewpoint_c
+      - feelslike_c
+      - temp_high_1d_c
+      - temp_low_1d_c
+      - precip_1d
+      - precip_1d_mm
+      - precip_today_metric
+      - wind_kph
+      - weather_1d_metric
+  - platform: time_date
+    display_options:
+      - 'date'
+  - platform: template
+    sensors:
+      verbrauch:
+        friendly_name: 'Strom Büro'
+        unit_of_measurement: 'W'
+        value_template: "{{ states.switch.mystrom_switch.attributes.current_power_w | round(0) }}"
+      bustowork:
+        friendly_name: 'Bus Aesplitz'
+        value_template: "{{ as_timestamp(states.sensor.next_departure.attributes.next_departure) | timestamp_custom('%H:%M') }}"
+      bustoworkthereafter:
+        friendly_name: 'Bus danach'
+        value_template: "{{ as_timestamp(states.sensor.next_departure.attributes.next_on_departure) | timestamp_custom('%H:%M') }}"
+  - platform: mqtt
+    state_topic: "anything/else"
+  - platform: swiss_public_transport
+    from: "Ittigen, Aespliz"
+    to: "Bern, Wankdorfbrücke"
+
+device_tracker:
+  - platform: ping
+    hosts:
+      Urs: 192.168.1.77
+      iPad: 192.168.1.36
+      Helen: 192.168.1.38
+      Christina: 192.168.1.40
+      sonoszp: 192.168.1.61
+
+camera:
+  - platform: mjpeg
+    mjpeg_url: http://192.168.1.69:8081
+    still_image_url: http://192.168.1.69/picture/1/current/?_username=admin&_signature=d1231995ea72e4bb200a718b047a7c9fab677c06
+
+
+mercedesme:
+  username: !secret merz_user
+  password: !secret merz_pass
+  scan_interval: 900
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml

@@ -1,0 +1,99 @@
+Datum:
+  entities:
+  - sensor.date
+  - sun.sun
+  - sensor.bustowork
+  - sensor.bustoworkthereafter
+
+Familie:
+  entities:
+  - device_tracker.urs
+  - device_tracker.christina
+  - device_tracker.helen
+  - device_tracker.ipad
+  - binary_sensor.random_binary_sensor
+
+Lampen:
+  entities:
+  - light.obergeschoss
+  - light.wohnzimmer
+  - light.kuche
+  - switch.mystrom_switch
+  - sensor.verbrauch
+  - sensor.tradfri_remote_control
+
+iPad:
+  entities:
+  - device_tracker.urs_ipad
+  - sensor.urs_ipad_battery_level
+  - sensor.urs_ipad_battery_state
+
+Musik:
+  entities:
+  - media_player.kuche
+
+Aktuell:
+  entities:
+  - sun.sun
+  - sensor.moon
+  - sensor.pws_temp_c
+  - sensor.pws_feelslike_c
+  - sensor.pws_pressure_mb
+  - sensor.pws_pressure_trend
+  - sensor.pws_relative_humidity
+  - sensor.pws_dewpoint_c
+  - sensor.pws_wind_kph
+
+Prognose:
+  entities:
+  - sensor.pws_weather_1d_metric
+  - sensor.pws_precip_1d
+  - sensor.pws_precip_1d_mm
+  - sensor.pws_precip_today_metric
+  - sensor.pws_temp_high_1d_c
+  - sensor.pws_temp_low_1d_c
+
+MQTT_Stuff:
+  control: hidden
+  entities:
+  - sensor.mqtt_sensor
+  - binary_sensor.mqtt_binary_sensor
+  - switch.sonoff2
+  - switch.sonoff3
+
+Licht:
+  view: yes
+  entities:
+  - group.Lampen
+
+Steuerung:
+  view: yes
+  entities:
+  - group.Datum
+  - group.Lampen
+  - group.Automation
+  - group.Familie
+  - group.all_automations
+
+Kamera:
+  view: yes
+  entities:
+  - camera.mjpeg_camera
+
+MQTT:
+  view: yes
+  entities:
+  - group.MQTT_Stuff
+
+Wetter:
+  view: yes
+  name: Wetter
+  entities:
+  - group.Aktuell
+  - group.Prognose
+
+Sounds:
+  view: yes
+  name: Musik
+  entities:
+  - group.Musik

@@ -1,0 +1,127 @@
+- alias: 'Licht an EG 30 min'
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:32:00'
+  condition:
+    condition: and
+    conditions:
+     - condition: state
+       entity_id: 'device_tracker.urs'
+       state: 'not_home'
+     - condition: state
+       entity_id: 'device_tracker.christina'
+       state: 'not_home'
+  action:
+    - service: light.turn_on
+      entity_id: 
+        - light.wohnzimmer
+        - light.kuche
+
+- alias: 'Licht an OG 45 min'
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:50:00'
+  condition:
+    condition: and
+    conditions:
+     - condition: state
+       entity_id: 'device_tracker.urs'
+       state: 'not_home'
+     - condition: state
+       entity_id: 'device_tracker.christina'
+       state: 'not_home'
+  action:
+    - delay: '00:{{ (range(10, 40)|random|int) }}:00'
+    - service: light.turn_on
+      entity_id: 
+        - light.obergeschoss
+
+- alias: 'Licht Büro'
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:10:00'
+  condition:
+    condition: and
+    conditions:
+     - condition: state
+       entity_id: binary_sensor.random_binary_sensor
+       state: 'on'
+     - condition: time
+       weekday:
+         - mon
+         - tue
+         - wed
+  action:
+    - service: switch.turn_on
+      entity_id: 
+        - switch.mystrom_switch
+
+
+- alias: 'Licht aus EG 21:45'
+  trigger:
+    - platform: time
+      at: '21:30:00'
+  action:
+    - delay: '00:{{ (range(10, 30)|random|int) }}:00'
+    - service: light.turn_off
+      entity_id: light.wohnzimmer
+
+- alias: 'Licht aus Küche 21:20'
+  trigger:
+    - platform: time
+      at: '21:00:00'
+  action:
+    - delay: '00:{{ (range(10, 32)|random|int) }}:00'
+    - service: light.turn_off
+      entity_id: light.kuche
+
+- alias: 'Licht aus OG 20:30'
+  trigger:
+    - platform: time
+      at: '20:00:00'
+  action:
+    - delay: '00:{{ (range(10, 59)|random|int) }}:00'
+    - service: light.turn_off
+      entity_id: light.obergeschoss
+
+- alias: 'Licht aus Büro 18:30'
+  trigger: 
+    - platform: time
+      at: '18:20:00'
+  action:
+    - delay: '00:{{ (range(10, 25)|random|int) }}:00'
+    - service: switch.turn_off
+      entity_id: switch.mystrom_switch
+
+- alias: "alles aus 22:22"
+  trigger:
+    - platform: time
+      at: "22:22:22"
+  action:
+    - service: light.turn_off
+      entity_id: 
+        - light.obergeschoss
+        - light.wohnzimmer
+        - light.kuche
+    - service: switch.turn_off
+      entity_id:
+        - switch.sonos2
+        - switch.sonos3
+        - switch.mystrom_switch
+
+- alias: "alles aus morgens"
+  trigger:
+    - platform: sun
+      event: sunrise
+  action:
+    - service: light.turn_off
+      entity_id: 
+        - light.obergeschoss
+        - light.wohnzimmer
+        - light.kuche
+    - service: switch.turn_off
+      entity_id:
+        - switch.mystrom_switch

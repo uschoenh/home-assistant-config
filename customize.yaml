@@ -1,0 +1,29 @@
+switch.mystrom_switch:
+  friendly_name: Büro
+  icon: mdi:lightbulb
+
+sensor.verbrauch:
+  icon: mdi:gauge
+
+sensor.tradfri_remote_control:
+  icon: mdi:battery
+
+light.erdgeschoss:
+  hidden: yes
+
+light.tradfri:
+  hidden: yes
+
+group.all_automations:
+  hidden: false
+  control: hidden
+  friendly_name: "Automation"
+
+sensor.bustowork:
+  icon: mdi:bus
+
+sensor.bustoworkthereafter:
+  icon: mdi:bus
+
+sensor.next_departure:
+  hidden: yes
