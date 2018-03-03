@@ -46,8 +46,6 @@ conversation:
 
 # Set up entities to be recorded
 recorder:
-  purge_interval: 7
-  purge_keep_days: 60
   exclude:
     domains:
       - automation
@@ -158,9 +156,7 @@ device_tracker:
 camera:
   - platform: mjpeg
     mjpeg_url: !secret movie_url
-#http://192.168.1.69:8081
     still_image_url: !secret still_url
-#http://192.168.1.69/picture/1/current/?_username=admin&_signature=d1231995ea72e4bb200a718b047a7c9fab677c06
 
 
 mercedesme:
