@@ -5,6 +5,6 @@ My home-assistant config currently includes
 * Sonoff Basic switches running sonoff-tasmota firmware (MQTT discover)
 * A Sonos speaker system
 * A MyStrom Switch
-* ...and some other Sensors
+* ...and some other sensors
 
 Main focus of the automations is automated switching of lights.
